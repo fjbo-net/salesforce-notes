@@ -1,6 +1,6 @@
 # Apex & .NET Basics
 
-🔗Source: [Apex & .NET Basics](https://trailhead.salesforce.com/content/learn/modules/apex_basics_dotnet?trailmix_creator_id=strailhead&trailmix_slug=prepare-for-your-salesforce-platform-developer-i-credential)
+🔗Source: [Apex & .NET Basics Trailhead module](https://trailhead.salesforce.com/content/learn/modules/apex_basics_dotnet?trailmix_creator_id=strailhead&trailmix_slug=prepare-for-your-salesforce-platform-developer-i-credential)
 
 Discover the basics of Apex and its similarities to programming with .NET.
 
