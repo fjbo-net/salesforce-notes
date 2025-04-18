@@ -8,3 +8,5 @@ Resources and notes from Salesforce Trailhead for the **[Integration Architect](
 	Summaries and notes:
 
 	- Link: **[Measure Performance for Your Salesforce Org](../../documentation/measure-performance-for-your-salesforce-org.md)**
+
+	- Link: **[Salesforce to Salesforce](../../documentation/salesforce-to-salesforce.md)**
