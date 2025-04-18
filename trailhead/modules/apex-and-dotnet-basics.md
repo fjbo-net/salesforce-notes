@@ -137,6 +137,31 @@ Apex Data Types
 - Value and Reference Types
 	- Work the same
 	- In Apex, all variables are initilized to `null` by default
+- Familiar collections
+	- List
+		- An ordered collection of elements
+		
+		- Syntax:
+			 
+			``` apex
+			List<String> myStrings =  new List<String> {'String1', 'String2', 'String3' };
+			```
+	- Set
+		- An unordered collection of elements that does not contain duplicates.
+		- Syntax:
+			
+			``` apex
+			Set<ID> accountIds = new Set<ID>{'001d000000BOaHSAA1','001d000000BOaHTAA1'};
+			List<Account> accounts = [SELECT Name FROM Account WHERE Id IN :accountIds];
+			```
+	- Map
+		- Collection of key-value pairs.
+		
+		- Syntax:
+
+			``` apex
+			Map<Id, Account> accountMap = new Map<Id, Account>([SELECT Id, Name FROM Account]);
+			```
 
 
 #### 1. 3. 3. ASP.NET to Visualforce
