@@ -52,7 +52,14 @@ A collection of notes about Salesforce.
 
 - Sharing and Visibility Architect
 
-- System Architect
+- **System Architect**
+
+	Granted after completing:
+
+	- Development Lifecycle and Deployment Architect
+	- Identity and Access Management Architect
+	- Integration Architect
+	- Platform Developer I
 
 - Technical Architect
 
