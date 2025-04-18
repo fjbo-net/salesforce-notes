@@ -10,3 +10,7 @@ Resources and notes from Salesforce Trailhead for the **[Integration Architect](
 	- Link: **[Measure Performance for Your Salesforce Org](../../documentation/measure-performance-for-your-salesforce-org.md)**
 
 	- Link: **[Salesforce to Salesforce](../../documentation/salesforce-to-salesforce.md)**
+
+	- Trail: **Explore Integration Patterns and Practices**
+
+		- **[Application Integration Patterns for Salesforce Lightning Platform](../../trailhead/modules/application-integration-patterns-for-salesforce-lightning-platform.md)**
