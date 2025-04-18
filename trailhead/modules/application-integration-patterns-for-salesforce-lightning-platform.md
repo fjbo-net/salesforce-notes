@@ -31,6 +31,8 @@
 		- Data Virtualization
 		- High-Frequency Data Replication
 		- Publish/Subscribe
+- [Practice the Layer Approach](#2-practice-the-layer-approach)
+	- []()
 
 
 ## 1. Learn About Integration Patterns and Designs
@@ -115,3 +117,60 @@
 **Publish/Subscribe**
 - Salesforce publishes an event (not specific to a consumer)
 - Any number of subscribers (consumers) listen and process the events
+
+
+## 2. Practice the Layer Approach
+
+### 2. 1. The Layer Approach
+
+&uarr; [Practice the Layer Approach](#2-practice-the-layer-approach)
+
+#### 2. 1. 1. Dimensions
+
+&uarr; [Practice the Layer Approach](#2-practice-the-layer-approach): [The Layer Approach](#2-1-the-layer-approach)
+
+Each dimension represents criteria that helps understand which solution is best to solve an integration problem.
+
+- **Layers**
+	- Different types of tasks in a system
+- **Volume**
+	- Amount of data synched
+	- Transformation activity between systems
+- **Timing**
+	- Either asynchro nous or synchronous
+- **Direction**
+	- Whether is:
+		- From Salesforce (into another system)
+		- (From another system) To Salesforce
+		- Bidirectional
+
+#### 2. 1. 2. Layers
+
+&uarr; [Practice the Layer Approach](#2-practice-the-layer-approach): [The Layer Approach](#2-1-the-layer-approach)
+
+**User Interface Layer**
+- Focuses on user interactions with the system
+- Layer interacts with the business process layer
+
+**Business Process Layer**
+- Includes data interaction, validation and processing data transactions
+- Layer interacts with the data layer
+
+**Data Layer**
+- Maps and identifies the primary data source and connections to other segments of the system
+
+#### 2. 1. 3. Layers in Salesforce Lightning Platform
+
+&uarr; [Practice the Layer Approach](#2-practice-the-layer-approach): [The Layer Approach](#2-1-the-layer-approach)
+
+| Lightning Platform Pattern | Layer |
+|--|--|
+| Remote Process Invocation-Request and Reply | Business logic |
+| Remote Process Invocation-Fire and Forget | Business logic |
+| Data Virtualization | Data |
+| Remote Call-In | Business logic |
+| Batch Data Synchronization | Data |
+| High Frequency Data Replication | Data and UI |
+| Publish/Subscribe | Data and Business Logic |
+
+## 3. Evaluate an Integration Pattern
