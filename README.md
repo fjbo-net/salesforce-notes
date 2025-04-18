@@ -2,6 +2,12 @@
 A collection of notes about Salesforce.
 
 
+## Contents
+
+- **[/certs](./certs/)**
+
+	Notes from Salesforce Trailhead for credentials.
+
 ## Credentials
 
 ### Administrator
