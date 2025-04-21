@@ -137,6 +137,8 @@ Apex Data Types
 - Value and Reference Types
 	- Work the same
 	- In Apex, all variables are initilized to `null` by default
+- Enums
+	- Apex support enums, but you can't define the ordinal (number) values
 - Familiar collections
 	- List
 		- An ordered collection of elements
