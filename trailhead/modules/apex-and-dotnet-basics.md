@@ -175,6 +175,19 @@ Visualforce is similar to ASP.NET Web Forms
 - Both use the Model-View-Controller paradigm
 - State view is just as painful due to the stateless nature of HTTP
 
+### 1. 4. What is Different?
+
+&uarr; [Map .NET Concepts to the Lightning Platform](#1-map-net-concepts-to-the-lightning-platform)
+
+Despite similarities with .NET, they are different.
+
+- Apex is NOT case sensitive
+- Apex and database are tightly coupled
+- Different design patterns
+- Unit tests are required
+- No solution, project, or config files
+- A much smaller class library
+
 
 ## 2. Understand Execution Context
 
