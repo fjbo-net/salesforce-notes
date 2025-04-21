@@ -168,6 +168,13 @@ Apex Data Types
 
 &uarr; [Map .NET Concepts to the Lightning Platform](#1-map-net-concepts-to-the-lightning-platform): [What is Similar?](#1-3-what-is-similar)
 
+Visualforce is similar to ASP.NET Web Forms
+
+- Clear separation between markup and code
+- Mapping code to properties defined in the controller
+- Both use the Model-View-Controller paradigm
+- State view is just as painful due to the stateless nature of HTTP
+
 
 ## 2. Understand Execution Context
 
