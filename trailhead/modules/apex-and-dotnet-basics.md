@@ -9,7 +9,7 @@ Discover the basics of Apex and its similarities to programming with .NET.
 
 - Understand which key features make up the Lightning Platform and the Apex programming language
 - Identify similarities and differences between .NET and the Lightning Platform
-- Use Developer COnsole to create your first Apex class
+- Use Developer Console to create your first Apex class
 - Use Anonymous Apex to invoke a method from an Apex class
 
 ## Key Takeaways 🧠
