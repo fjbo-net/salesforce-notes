@@ -15,6 +15,49 @@ Discover the basics of Apex and its similarities to programming with .NET.
 ## Key Takeaways 🧠
 
 - [Map .NET Concepts to the Lightning Platform](#1-map-net-concepts-to-the-lightning-platform)
+
+	- [Platform Basics](#1-1-platform-basics)
+		- Everything is defined as metadata
+		- Tightly integrated with the database	
+			- Database define objects and properties
+			- Built-in security and reporting
+		- Platform-as-a-Service cloud model
+
+	- [Apex Basics](#1-2-apex-basics)
+		- Mostly declarative development
+		- Code is not always needed
+
+	- [What is Similar?](#1-3-what-is-similar)
+		- [Object-oriented design](#1-3-1-object-oriented-design)
+		- [Data Types](#1-3-2-data-types)
+		- ASP.NET to Visualforce
+			- Separation between markup and code
+			- Property mapping
+			- MVC paradigm
+
+	- [What is Different?](#1-4-what-is-different)
+		- Apex is case insensitive
+		- Database objects are automatically represented in code
+		- Design patterns are different
+		- 75% test coverage is required for production deployment
+		- No solution, project or config files
+		- Less capable out-of-the-box class library
+		- Lightning Platform is component-based
+
+	- [Development Tools](#1-5-development-tools)
+		- Developer Console (Salesforce web UI)
+		- Visual Studio Code Extensions
+		- Salesforce CLI
+
+	- [Handling Security](#1-6-handling-security)
+		- Identity is handled by the platform
+		- Access is granular
+		- Security is declarative
+
+	- [What About Integration?](#1-6-handling-security)
+		- SOAP and REST integration in both directions
+		- Uses Apex for both exposing and consuming data
+
 - [Understand Execution Context](#2-understand-execution-context)
 - [Use Asynchronous Apex](#3-use-asynchronous-apex)
 - [Debug and Run Diagnostics](#4-debug-and-run-diagnostics)
@@ -198,6 +241,52 @@ Despite similarities with .NET, they are different.
 	- No config file
 - A much smaller class library
 - Lightning is component-based
+
+### 1. 5. Development Tools
+
+&uarr; [Map .NET Concepts to the Lightning Platform](#1-map-net-concepts-to-the-lightning-platform)
+
+- Developer Console
+	- Used for:
+		- Edit source code
+		- Navigate source code
+		- Debugging code
+		- Troubleshooting
+		- Executing SOQL queries
+		- View (SOQL) query plans
+- Visual Studio Code
+	- Has extensions for custom development
+- Salesforce CLI
+
+
+### 1. 6. Handling Security
+
+&uarr; [Map .NET Concepts to the Lightning Platform](#1-map-net-concepts-to-the-lightning-platform)
+
+- Identity is handled by the platform
+	- No need for authentication procedures
+	- No need for storing passwords
+	- No need for connection strings
+- Access is granular
+	- Different permission levels
+		- Object-level
+		- Record-level
+		- Field-level
+- Security is declarative
+	- Usually defined and configured by a *Saleseforce Administrator*
+
+### 1. 7. What About Integration?
+
+&uarr; [Map .NET Concepts to the Lightning Platform](#1-map-net-concepts-to-the-lightning-platform)
+
+- SOAP and REST integration in both directions
+- Create/expose web services in Apex
+- Invoke external web services from Apex
+- React to incoming emails, send outbound messages
+- SOAP and REST APIs for direct data access
+- API toolkits for various languages:
+	- .NET, Java, PHP, Objective C, Ruby, JavaScript
+- Third-party integration via AppExchange
 
 
 ## 2. Understand Execution Context
