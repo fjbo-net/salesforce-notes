@@ -185,10 +185,19 @@ Despite similarities with .NET, they are different.
 
 - Apex is NOT case sensitive
 - Apex and database are tightly coupled
+	- All database tables automatically create a code representation
+	- Changes to the database automatically update object definitions (and properties)
 - Different design patterns
 - Unit tests are required
+	- 75% test coverage is required for deploying Apex code to a production org
 - No solution, project, or config files
+	- All code resides and executes in the cloud
+	- The closest concept to a solution or project file is a Lightning Platform application (a loose collection of components and pages)
+	- No need for connection strings or connections to a database
+	- No route configuration
+	- No config file
 - A much smaller class library
+- Lightning is component-based
 
 
 ## 2. Understand Execution Context
