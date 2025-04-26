@@ -11,6 +11,11 @@ Discover the basics of Apex and its similarities to programming with .NET.
 - Identify similarities and differences between .NET and the Lightning Platform
 - Use Developer Console to create your first Apex class
 - Use Anonymous Apex to invoke a method from an Apex class
+- Know which methods to use to invoke Apex
+- Write a trigger for a Salesforce object
+- Observe how execution context works by executing code in Developer Console
+- Understand how governor limits impact design patterns
+- Understand the importance of working with bulk operations
 
 ## Key Takeaways 🧠
 
@@ -59,6 +64,63 @@ Discover the basics of Apex and its similarities to programming with .NET.
 		- Uses Apex for both exposing and consuming data
 
 - [Understand Execution Context](#2-understand-execution-context)
+
+	- [What Is Execution Context?](#2-1-what-is-execution-context)
+		- Time between when code is executed and when it ends
+		- Apex code isn't always the only code executing
+
+		- [Methods of Invoking Apex](#2-1-1-methods-of-invoking-apex)
+			- Database Trigger
+			- Anonymous Apex
+			- Asynchronous Apex
+			- Web Services
+			- Email Services
+			- Visualforce or Lightning Pages
+
+		- [Important Considerations](#2-1-2-important-considerations)
+			- Declarative features can trigger actions within execution context
+			- Apex executes in system context by default
+				- Has access to all objects and fields
+				- Ignores: Object permissions, field-level security and sharing rules
+			- Keyword `with sharing` takes current user's rules into account
+
+	- [Trigger Essentials](#2-2-trigger-essentials)
+		- Execute programming logic before or after events to records
+		- Trigger Events:
+			- Insert: `before insert` and `after insert`
+			- Update: `before update` and `after update`
+			- Delete: `before delete` and `after delete`
+			- Undelete: `after delete` only
+
+		- [Best Practices](#2-2-2-best-practices)
+			- Only use triggers when point-and-click automation tools cannot accomplish the task
+			- Use Flow Builder for managing business logic without writing code when possible
+			- Use only one trigger per object
+			- Use context-specific handler methods within triggers to create logic-less triggers
+	
+	- [Examining the Execution Log](#2-4-examining-the-execution-log)
+		- Everything between `EXECUTION_STARTED` and `EXECUTION_STARTED` is execution context
+		- CODE_UNIT_STARTED events mark the start of specific code units
+		- All code operates under the same execution context
+		- Subject to the same set of governor limits
+
+	- [Working with Limits](#2-5-working-with-limits)
+		- Current Limits:
+			- 100 SOQL queries (sync)
+			- 150 DML statements (sync)
+		- Limits tend to change with each major release
+
+	- [Working in Bulk](#2-6-working-in-bulk)
+		- Apex triggers can receive up to 200 records at once
+		- If a trigger performs SOQL query or DML statement inside a loop, it can hit limits
+		- "Bulkify" your code from the start
+
+	- [Tell Me More](#2-7-tell-me-more)
+		- Apex uses try-catch-finally block for exception handling
+		- No application or session variables in Lightning Platform
+		- Static variables only persist information within a single execution context
+		- Working with limits involves many tradeoffs, especially for managed packages
+
 - [Use Asynchronous Apex](#3-use-asynchronous-apex)
 - [Debug and Run Diagnostics](#4-debug-and-run-diagnostics)
 
@@ -291,6 +353,218 @@ Despite similarities with .NET, they are different.
 
 ## 2. Understand Execution Context
 
+Follow Along with *Trail Together*
+- Video available at: https://play.vidyard.com/oWWzy6KQ8LEKfbGMskyhhR?second=998
+
+### 2. 1. What Is Execution Context?
+
+&uarr; [Understand Execution Context](#2-understand-execution-context)
+
+- Similar to application domain in ASP.NET
+- Represents the time between when code is executed and when it ends
+- Your Apex code isn't always the only code executing
+
+#### 2. 1. 1. Methods of Invoking Apex
+
+&uarr; [Understand Execution Context](#2-understand-execution-context): [What Is Execution Context](#2-1-what-is-execution-context)
+
+- Database Trigger
+	- Invoked for a specific event on a custom or standard object
+- Anonymous Apex
+	- Code snippets executed on the fly in Dev Console & other tools
+- Asynchronous Apex
+	- Occurs when executing a future or queueable Apex
+	- Running a batch job
+	- Scheduling Apex to run at a specified interval
+- Web Services
+	- Code exposed via SOAP or REST inbound or outbound web services
+- Email Services
+	- Code set up to process inbound or outbound email
+- Visualforce or Lightning Pages
+	- Controllers and components can execute Apex code
+	- Can be triggered automatically or by user actions
+	- Can be executed by Lightning processes and flows
+
+#### 2. 1. 2. Important Considerations
+
+&uarr; [Understand Execution Context](#2-understand-execution-context)
+
+- Declarative platform features can trigger actions within execution context
+- Apex executes in system context by default
+	- Has access to all objects and fields
+	- Object permissions, field-level security, and sharing rules aren't applied
+- You can use `with sharing` keyword to take current user's sharing rules into account
+
+### 2. 2. Trigger Essentials
+
+&uarr; [Understand Execution Context](#2-understand-execution-context)
+
+- Similar to SQL Server triggers
+- Execute programming logic before or after events to records
+- Trigger events:
+	- before insert
+	- before update
+	- before delete
+	- after insert
+	- after update
+	- after delete
+	- after undelete
+
+#### 2. 2. 1. Trigger Syntax
+
+&uarr; [Understand Execution Context](#2-understand-execution-context): [Trigger Essentials](#2-2-trigger-essentials)
+
+```
+trigger TriggerName on ObjectName (trigger_events) {
+	 // code_block
+}
+```
+
+#### 2. 2. 2. Best Practices
+
+&uarr; [Understand Execution Context](#2-understand-execution-context): [Trigger Essentials](#2-2-trigger-essentials)
+
+- Only use triggers when point-and-click automation tools cannot accomplish the task
+- Use Flow Builder for managing business logic without writing code when possible
+- Use only one trigger per object
+- Use context-specific handler methods within triggers to create logic-less triggers
+
+### 2. 3. Mark Execution Context
+
+&uarr; [Understand Execution Context](#2-understand-execution-context)
+
+- Walkthrough creating an Apex database trigger that creates an opportunity when a new account is entered
+
+	1. Create an Apex Class
+
+		1. From *Setup*, in User Menu, click on **Developer Console**
+
+		2. In the *Developer Console*:
+			1. At the top bar menu, click on **File**
+			2. Click on **New**
+			3. Click on **Apex Class**
+		3. Name the new class, for example: `AccountHandler`
+
+		4. Write class definition
+			
+			Sample Apex Class:
+
+			``` apex
+			public with sharing class AccountHandler {
+				public static void CreateNewOpportunity(List<Account> accts) {
+					for (Account a : accts) {
+						Opportunity opp = new Opportunity();
+						opp.Name = a.Name + ' Opportunity';
+						opp.AccountId = a.Id;
+						opp.StageName = 'Prospecting';
+						opp.CloseDate = System.Today().addMonths(1);
+						insert opp;
+					}
+				}
+			}
+			```
+		5. Save the Apex code using the keyboard shortcut **Ctrl** + **S**
+
+	2. Create a trigger
+
+		1. From *Setup*, in User Menu, click on **Developer Console**
+
+		2. In the *Developer Console*:
+			1. At the top bar menu, click on **File**
+			2. Click on **New**
+			3. Click on **Apex Trigger**
+		3. Name the new class, for example: `AccountTrigger`
+
+		4. Write the trigger definition
+
+			For example:
+
+			``` apex
+			trigger AccountTrigger on Account (before insert, before update, before delete, after insert, after update, after delete,  after undelete) {
+				if (Trigger.isAfter && Trigger.isInsert) {
+					AccountHandler.CreateNewOpportunity(Trigger.New);
+				}
+			}
+			```
+
+		5. Save the Apex code using the keyboard shortcut **Ctrl** + **S**
+
+	3. Run the trigger
+
+		1. From *Setup*, in User Menu, click on **Developer Console**
+
+		2. In the *Developer Console*:
+			1. At the top bar menu, click on **File**
+			2. Click on **New**
+			3. Click on **Apex Trigger**
+
+		3. Name the new class, for example: `AccountTrigger`
+
+	4. Write the trigger definition
+
+
+### 2. 4. Examining the Execution Log
+
+&uarr; [Understand Execution Context](#2-understand-execution-context)
+
+- First line marks EXECUTION_STARTED event
+- Last line is EXECUTION_FINISHED event
+- Everything between is the execution context
+- CODE_UNIT_STARTED events mark the start of specific code units
+- All code operates under the same execution context
+- Subject to the same set of governor limits
+
+### 2. 5. Working with Limits
+
+&uarr; [Understand Execution Context](#2-understand-execution-context)
+
+- Governor limits keep each instance from consuming too many resources
+- Most common limits involve:
+	- Number of SOQL queries
+	- Number of DML statements
+- Current limits:
+	- 100 SOQL queries (synchronous)
+	- 150 DML statements (synchronous)
+- Limits tend to change with each major release
+
+### 2. 6. Working in Bulk
+
+&uarr; [Understand Execution Context](#2-understand-execution-context)
+
+- Common trap: designing code to work with a single record
+- Apex triggers can receive up to 200 records at once
+- If a trigger performs SOQL query or DML statement inside a loop, it can hit limits
+- "Bulkify" your code from the start
+- Example of bad code: DML operation inside a for loop
+- Fixed code: write to a list variable inside loop, insert contents in one step
+
+### 2. 6. 1. Testing Bulk Code
+
+&uarr; [Understand Execution Context](#2-understand-execution-context): [Working in Bulk](#2-6-working-in-bulk)
+
+- Write unit tests to ensure code works
+- Test class example includes:
+	- Creation of 200 test accounts
+	- Verification that 200 new accounts were inserted
+	- Verification that 200 new opportunities were created
+
+### 2. 7. Tell Me More
+
+&uarr; [Understand Execution Context](#2-understand-execution-context)
+
+- Apex uses try-catch-finally block for exception handling
+- No application or session variables in Lightning Platform
+- Static variables only persist information within a single execution context
+- Working with limits involves many tradeoffs, especially for managed packages
+
+### 2. 8. Resources
+
+&uarr; [Understand Execution Context](#2-understand-execution-context)
+
+- [Invoking Apex](https://developer.salesforce.com/docs/atlas.en-us.apexcode.meta/apexcode/apex_invoking.htm) in the Apex Code Developer's Guide
+- [Getting Started with Apex Triggers](https://developer.salesforce.com/trailhead/apex_triggers/apex_triggers_intro) in the Developer Beginner trail
+- [Executing Governors and Limits](https://developer.salesforce.com/docs/atlas.en-us.apexcode.meta/apexcode/apex_gov_limits.htm)
+- [Testing Triggers](https://developer.salesforce.com/trailhead/apex_testing/apex_testing_triggers) in the Developer Beginner Trail
 
 ## 3. Use Asynchronous Apex
 
