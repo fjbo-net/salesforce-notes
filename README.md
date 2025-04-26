@@ -8,6 +8,10 @@ A collection of notes about Salesforce.
 
 	Contains structured paths of notes based on Salesforce Trailhead material for prepping for Salesforce certifications.
 
+- **[/notes](./notes)**
+
+	Contains the notes extracted from different sources and materials.
+
 ## Credentials
 
 ### Administrator
