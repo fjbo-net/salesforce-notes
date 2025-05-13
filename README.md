@@ -4,9 +4,13 @@ A collection of notes about Salesforce.
 
 ## Contents
 
-- **[/certs](./certs/)**
+- **[/certification-paths](./certification-paths/)**
 
-	Notes from Salesforce Trailhead for credentials.
+	Contains structured paths of notes based on Salesforce Trailhead material for prepping for Salesforce certifications.
+
+- **[/notes](./notes)**
+
+	Contains the notes extracted from different sources and materials.
 
 ## Credentials
 
