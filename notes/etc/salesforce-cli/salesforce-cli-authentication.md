@@ -59,3 +59,59 @@ auth:web:login
 	- Replece the `hands-on-org-subdomain` *subdomain* in the URL with the Hands-On Org instance subdomain
 		- Get the Hands-On Org URl by launching the Hands-On Org and then logging off
 			- A login screen for the Hands-On Org instance will be displayed, verify that the URL is a subdomain of `trailblaze.my.salesforce.com`
+
+## 2. Logout Command
+Log out of a Salesforce org.
+
+### 2. 1. Flags
+
+&uarr; [Logout Command](#2-logout-command)
+
+| Flag | Description |
+| -- | -- |
+| `--json` | (Optional) Format output as json. |
+| `--flags-dir` | (Optional) Import flag values from a directory. |
+| `--target-org` (`-o`) | (Optional) Username or alias of the target Org. |
+| `--all` (`-a`) | (Optional) Include all authenticated orgs. |
+| `--no-prompt` (`-p`) | (Optional) Don't prompt for confirmation. |
+
+
+### 2. 2. Command Aliases
+
+&uarr; [Logout Command](#2-logout-command)
+
+```
+force:auth:logout
+```
+
+```
+auth:logout
+```
+
+### 2. 2. Examples
+
+&uarr; [Logout Command](#2-logout-command)
+
+- **Interactive Logout** (Select Org)
+
+	``` bash
+	sf org logout
+	```
+
+- **Logout All Orgs**
+
+	``` bash
+	sf org logout -a
+	```
+
+- **Logout by Alias**
+
+	```
+	sf org logout -o MyOrgAlias -p
+	```
+
+- **Logout by User and Org**
+
+	```
+	sf org logout -o user@org-instance.example.com
+	```
