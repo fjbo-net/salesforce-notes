@@ -16,6 +16,10 @@ Discover the basics of Apex and its similarities to programming with .NET.
 - Observe how execution context works by executing code in Developer Console
 - Understand how governor limits impact design patterns
 - Understand the importance of working with bulk operations
+- Know when to use Asynchronous Apex
+- Use future methods to handle a web callout
+- Work with the batchable interface to process a large number of records
+- Understand the advantages of using the queueable interface when you need to meet in the middle
 
 ## Key Takeaways 🧠
 
@@ -122,6 +126,48 @@ Discover the basics of Apex and its similarities to programming with .NET.
 		- Working with limits involves many tradeoffs, especially for managed packages
 
 - [Use Asynchronous Apex](#3-use-asynchronous-apex)
+	- [When To Go Asynchronous](#3-1-when-to-go-asynchronous)
+		- Processing large volumes of records
+		- Making external web service callouts
+		- Improving user experience by offloading processing to async calls
+	- [Future Methods](#3-2-future-methods)
+		- [Implementation](#3-2-1-future-methods-implementation):
+			- Add `@future` annotation to make a static method asynchronous
+			- Use `@future(callout=true)` for web service callouts
+		- [Limitations](#3-2-2-future-methods-limitations):
+			- No execution tracking
+			- Parameter restrictions
+			- No chaining
+	- [Batchable Interface](#3-3-1-batchable-interface)
+		- Process up to 150 million records
+		- Clean up or archive large datasets
+		- Can utilize Bulk API 2.0
+		- Schedulable for specific times
+		- [Implementation](#3-3-1-1-batchable-interface-implementation):
+			- Implement `Database.Batchable<sObject>` interface
+			- Define three methods: `start()`, `execute()`, and `finish()`
+			- Invoke using `Database.executeBatch()`
+			- Default batch size: 200 records
+		- [Limitations](#3-3-1-2-batchable-limitations):
+			- Troubleshooting can be difficult
+			- Jobs are queued and subject to server availability
+			- Still subject to various platform limits
+	- [Queueable Apex](#3-3-3-and-then-there-was-queueable-apex)
+		- Best of both worlds
+			- Accepts non-primitive types
+			- Progress can be tracked
+			- Job chaining
+		- Implementation:
+	- [Tell Me More](#3-4-tell-me-more)
+		- Apex Flex Queue
+		- Scheduled Apex
+		- Use **Future Methods** for simple async processing and web callouts
+		- Use **Batch Apex** for processing large data volumes (millions of records)
+		- Use **Queueable Apex** when you need the middle ground - more features than future methods but simpler than batch
+		- Consider platform limits even in asynchronous context
+		- Choose the right tool based on your specific requirements
+
+
 - [Debug and Run Diagnostics](#4-debug-and-run-diagnostics)
 
 
@@ -567,6 +613,239 @@ trigger TriggerName on ObjectName (trigger_events) {
 - [Testing Triggers](https://developer.salesforce.com/trailhead/apex_testing/apex_testing_triggers) in the Developer Beginner Trail
 
 ## 3. Use Asynchronous Apex
+Follow Along with *Trail Together*
+- Video available at: https://play.vidyard.com/oWWzy6KQ8LEKfbGMskyhhR?second=1932
+	- Clip starts at 32:07
 
+### 3. 1. When to Go Asynchronous
+
+&uarr; [Use Asynchronous Apex](#3-use-asynchronous-apex)
+
+Main reasons for choosing asynchronous programming on the Lightning Platform:
+	- **Processing a very large number of records**
+		- Limits associated with asynchronous processes are higher than synchronous processes
+		- Best bet for processing thousands or millions of records
+	- **Making callouts to external web services**
+		- Callouts can take a long time to process
+		- In the Lightning Platform, triggers can't make callouts directly
+	- **Creating a better and faster user experience**
+		- Offload some processing to asynchronous calls
+
+### 3. 2. Future Methods
+
+&uarr; [Use Asynchronous Apex](#3-use-asynchronous-apex)
+
+- Future Methods are the async methods in Apex
+- Used when you need to make a callout to a web service or want to offload simple processing to an asynchronous task
+- Changing a method from synchronous to asynchronous processing is amazingly easy
+- Just add the `@future` annotation to your method
+- Requirements:
+	- Method must be static
+	- Method must return only a void type
+- Called like any other static methods
+
+#### 3. 2. 1. Future Methods Implementation
+
+&uarr; [Use Asynchronous Apex](#3-use-asynchronous-apex): [Future Methods](#3-2-future-methods)
+
+- Add `@future` annotation to make a *static* method asynchronous
+- Use `@future(callout=true)` for web service callouts
+
+Example for performing a web service callout:
+``` java
+public class MyFutureClass {
+	// Include callout=true when making callouts
+	@future(callout=true)
+	static void myFutureMethod(Set<Id> ids) {
+		// Get the list of contacts in the future method since
+		// you cannot pass objects as arguments to future methods
+		List<Contact> contacts = [SELECT Id, LastName, FirstName, Email
+			FROM Contact WHERE Id IN :ids];
+		// Loop through the results and call a method
+		// which contains the code to do the actual callout
+		for(Contact con: contacts) {
+			String response = anotherClass.calloutMethod(con.Id,
+				con.FirstName,
+				con.LastName,
+				con.Email);
+			// May want to add some code here to log
+			// the response to a custom object
+		}
+	}
+}
+```
+
+#### 3. 2. 2. Future Methods Limitations
+
+&uarr; [Use Asynchronous Apex](#3-use-asynchronous-apex): [Future Methods](#3-2-future-methods)
+
+
+Limitations to consider before using a future method:
+	- **No execution tracking**
+		- Can't track execution because no Apex job ID is returned
+	- **Parameter restrictions**
+		- Parameters must be primitive data types, or collections of primitive data types
+		- Future methods can't take sObjects as arguments as they might change in the time before the @future method executes
+	- **No chaining**
+		- You can't chain future methods and have one call another
+		- Use Queueable apex if you need execution in a certain order
+- Although asynchronous calls are sometimes done to avoid limits, you still need to consider limits
+
+### 3. 3. Batch or Scheduled Apex
+
+&uarr; [Use Asynchronous Apex](#3-use-asynchronous-apex)
+
+#### 3. 3. 1. Batchable Interface
+
+&uarr; [Use Asynchronous Apex](#3-use-asynchronous-apex): [Batch or Scheduled Apex](#3-3-batch-or-scheduled-apex)
+
+- Another long-used asynchronous tool is the batchable interface
+- Use cases:
+	- Clean up or archive up to 150 million records
+	- Can utilize the Bulk API 2.0 in your Apex code
+	- Can schedule your batches to run at a particular time
+
+##### 3. 3. 1. 1. Batchable Interface Implementation
+
+&uarr; [Use Asynchronous Apex](#3-use-asynchronous-apex): [Batch or Scheduled Apex](#3-3-batch-or-scheduled-apex): [Batchable Interface](#3-3-1-batchable-interface)
+
+- Your class implements the Database.Batchable interface
+- Define start(), execute(), and finish() methods
+- Invoke a batch class using the Database.executeBatch method
+
+Example batchable class that processes all accounts in an org and sends an email when done:
+
+``` java
+global class MyBatchableClass implements
+			Database.Batchable<sObject>,
+			Database.Stateful {
+	// Used to record the total number of Accounts processed
+	global Integer numOfRecs = 0;
+	// Used to gather the records that will be passed to the interface method
+	// This method will only be called once and will return either a
+	// Database.QueryLocator object or an Iterable that contains the records
+	// or objects passed to the job.
+	global Database.QueryLocator start(Database.BatchableContext bc) {
+		return Database.getQueryLocator('SELECT Id, Name FROM Account');
+	}
+	// This is where the actual processing occurs as data is chunked into
+	// batches and the default batch size is 200.
+	global void execute(Database.BatchableContext bc, List<Account> scope) {
+		for(Account acc : scope) {
+			// Do some processing here
+			// and then increment the counter variable
+			numOfRecs = numOfRecs + 1;
+		}
+	}
+	// Used to execute any post-processing that may need to happen. This
+	// is called only once and after all the batches have finished.
+	global void finish(Database.BatchableContext bc) {
+		EmailManager.sendMail('someAddress@somewhere.com',
+							numOfRecs + ' Accounts were processed!',
+							'Meet me at the bar for drinks to celebrate');
+	}
+}
+```
+
+Invoke the batch class using anonymous code:
+
+``` java
+MyBatchableClass myBatchObject = new MyBatchableClass();
+Database.executeBatch(myBatchObject);
+```
+
+##### 3. 3. 1. 2. Batchable Limitations
+
+&uarr; [Use Asynchronous Apex](#3-use-asynchronous-apex): [Batch or Scheduled Apex](#3-3-batch-or-scheduled-apex): [Batchable Interface](#3-3-1-batchable-interface)
+
+
+Limitations to consider:
+- **Troubleshooting can be troublesome**
+- **Jobs are queued and subject to server availability**
+	- Can sometimes take longer than anticipated
+- **Limits**
+	- Still subject to various limits
+
+#### 3. 3. 2. Scheduled Apex
+
+&uarr; [Use Asynchronous Apex](#3-use-asynchronous-apex): [Batch or Scheduled Apex](#3-3-batch-or-scheduled-apex)
+
+Scheduled Apex not covered in this unit. 😶‍🌫️
+
+**Note**: Scheduled Apex is similar to the batchable interface
+
+- Implements the schedulable interface
+- Can be used to invoke Apex at specific times
+- Learn more in the [Asynchronous Apex](https://trailhead.salesforce.com/content/learn/modules/asynchronous_apex) module
+
+#### 3. 3. 3. And Then There Was Queueable Apex
+
+&uarr; [Use Asynchronous Apex](#3-use-asynchronous-apex): [Batch or Scheduled Apex](#3-3-batch-or-scheduled-apex)
+
+Best of Both Worlds
+
+- **Non-primitive types**
+	- Accepts sObjects and custom Apex types as parameters
+- **Job monitoring**
+	- Returns jobId for tracking progress
+- **Job chaining**
+	- Can chain one job to another for sequential processing
+
+##### 3. 3. 3. 1. Queueable Apex Implementation
+- Implement `Queueable` interface
+- Define `execute(QueueableContext context)` method
+- Invoke using `System.enqueueJob()`
+- Much easier to implement than Batch Apex
+
+Example converting the future method web callout to Queueable Apex:
+
+```apex
+public class MyQueueableClass implements Queueable {
+	private List<Contact> contacts;
+	// Constructor for the class, where we pass
+	// in the list of contacts that we want to process
+	public MyQueueableClass(List<Contact> myContacts) {
+		contacts = myContacts;
+	}
+	public void execute(QueueableContext context) {
+		// Loop through the contacts passed in through
+		// the constructor and call a method
+		// which contains the code to do the actual callout
+		for(Contact con: contacts) {
+			String response = anotherClass.calloutMethod(con.Id,
+					con.FirstName,
+					con.LastName,
+					con.Email);
+			// May still want to add some code here to log
+			// the response to a custom object
+		}
+	}
+}
+```
+
+To invoke Queueable Apex:
+
+```apex
+List<Contact> contacts = [SELECT Id, LastName, FirstName, Email
+	FROM Contact WHERE Is_Active__c = true];
+Id jobId = System.enqueueJob(new MyQueueableClass(contacts));
+```
+
+### 3. 4. Tell Me More
+
+&uarr; [Use Asynchronous Apex](#3-use-asynchronous-apex)
+
+- **Apex Flex Queue**
+	- Eliminates the 5 concurrent batch limit and allows job order management
+- **Scheduled Apex**
+	- Uses schedulable interface to invoke Apex at specific times
+
+Best Practices:
+- Use **Future Methods** for simple async processing and web callouts
+- Use **Batch Apex** for processing large data volumes (millions of records)
+- Use **Queueable Apex** when you need the middle ground
+	- More features than future methods but simpler than batch
+- Consider platform limits even in asynchronous context
+- Choose the right tool based on your specific requirements
 
 ## 4. Debug and Run Diagnostics
