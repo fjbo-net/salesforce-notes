@@ -20,6 +20,8 @@ Discover the basics of Apex and its similarities to programming with .NET.
 - Use future methods to handle a web callout
 - Work with the batchable interface to process a large number of records
 - Understand the advantages of using the queueable interface when you need to meet in the middle
+- Understand which debugging features are available on the Lightning Platform
+- Use the _Log Inspector_ in _Developer Console_ to examine debug logs
 
 ## Key Takeaways 🧠
 
@@ -169,7 +171,17 @@ Discover the basics of Apex and its similarities to programming with .NET.
 
 
 - [Debug and Run Diagnostics](#4-debug-and-run-diagnostics)
-
+	- Debug logs are the primary tool for debugging and analyzing code on the platform
+	- [Debug Limits](#4-1-1-debug-limits)
+		- 20MB per log
+		- 1000 MB per Org
+	- [Use the Log Inspector](#4-2-use-the-log-inspector)
+		- Developer Console's Log Inspector provides:
+			- Timeline
+			- Execution units
+			- Filtering
+	= [Set Checkpoints](#4-3-set-checkpoints)
+		- Checkpoints provide detailed execution information without stopping execution
 
 ## 1. Map .NET Concepts to the Lightning Platform
 
@@ -849,3 +861,66 @@ Best Practices:
 - Choose the right tool based on your specific requirements
 
 ## 4. Debug and Run Diagnostics
+Follow Along with *Trail Together*
+- Video available at: https://play.vidyard.com/oWWzy6KQ8LEKfbGMskyhhR?second=2437
+	- Clip starts at 40:30
+
+### 4. 1. Your Friend, the Debug Log
+
+&uarr; [Debug and Run Diagnostics](#4-debug-and-run-diagnostics)
+
+- Use `System.debug(...)` to write into the log
+- Logging Levels:
+	- `NONE`
+	- `ERROR`
+	- `WARN`
+	- `INFO`
+	- `DEBUG`
+	- `FINE`
+	- `FINER`
+	- `FINEST`
+- Logging levels are cumulative
+
+#### 4. 1. 1. Debug Limits
+
+&uarr; [Debug and Run Diagnostics](#4-debug-and-run-diagnostics)
+
+- Each debug log must be 20 MB or smaller
+- Logs exceeding limit won't show complete information
+- Each Org retains up to 1,000 MB of debug logs
+- Oldest logs are overwritten when limit exceeded
+- Critical to manage limits since debug logs are primary debugging method
+- Missing error messages prevent troubleshooting
+
+### 4. 2. Use the Log Inspector
+
+&uarr; [Debug and Run Diagnostics](#4-debug-and-run-diagnostics)
+
+- Developer Console's Log Inspector is a key debugging feature
+- Provides detailed analysis of debug log execution
+- Steps to configure and use:
+  1. Set debug levels through **Debug** > **Change Log Levels**
+  0. Configure *General Trace Setting* with appropriate log levels
+  0. Use **Debug** > **Perspective Manager** to set default view
+  0. Execute anonymous code through **Debug** > **Open Execute Anonymous Window**
+  0. Examine results in Timeline and Executed Units tabs
+  0. Use *Filter* option in *Execution Log* for specific searches
+- Different debug levels show different amounts of information
+- Log size varies significantly based on debug level settings
+
+### 4. 3. Set Checkpoints
+
+&uarr; [Debug and Run Diagnostics](#4-debug-and-run-diagnostics)
+
+- Checkpoints are Lightning Platform's alternative to traditional breakpoints
+- Provide detailed execution information without stopping execution
+- Cloud-based, multi-tenant environment prevents traditional breakpoint behavior
+- Halting execution would keep database connections open, causing resource issues
+- Steps to use checkpoints:
+  1. Open class file in **Developer Console**
+  0. Click in left margin next to line number to set checkpoint (red dot appears)
+  0. Execute code that triggers the checkpoint
+  0. View *Checkpoint Inspector* results
+  0. Examine *Symbols* tab with *Key* and *Value* columns
+  0. Review *Heap* tab showing *Count* and *Total Size* columns
+- Checkpoints reveal execution details at specific code lines without interrupting flow
