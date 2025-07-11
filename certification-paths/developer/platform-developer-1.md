@@ -8,3 +8,4 @@ Resources and notes from Salesforce Trailhead for the **[Platform Developer I](h
 	Summaries and notes:
 
 	- Module: **[Apex & .NET Basics](../../trailhead/modules/apex-and-dotnet-basics.md)**
+	- Module: **[Formulas and Validations](../../trailhead/modules/formulas-and-validations.md)**
