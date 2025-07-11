@@ -5,8 +5,6 @@ Resources and notes from Salesforce Trailhead for the **[Platform Developer I](h
 
 - Trailmix: [Prepare for Your Salesforce Platform Developer I Credential](https://trailhead.salesforce.com/users/strailhead/trailmixes/prepare-for-your-salesforce-platform-developer-i-credential)
 
-    Summaries and notes:
+	Summaries and notes:
 
-    - Module: **Explore Integration Patterns and Practices**
-
-        - **[Apex & .NET Basics](../../trailhead/modules/apex-and-dotnet-basics.md)**
+	- Module: **[Apex & .NET Basics](../../trailhead/modules/apex-and-dotnet-basics.md)**
