@@ -49,6 +49,15 @@ auth:web:login
 
 #### 1. 5. 3. Examples
 
+- **Log In To a Sandbox**
+
+	``` bash
+	sf org login web -a Sandbox -r https://sandbox-org-subdomain.sandbox.my.salesforce.com
+	```
+
+	- Replace the `Sandbox` *alias* with the desired alias for the Org
+	- Replece the `sandbox-org-subdomain` *subdomain* in the URL with the Hands-On Org instance subdomain
+
 - **Log In To a Hands-On Org**
 
 	``` bash
