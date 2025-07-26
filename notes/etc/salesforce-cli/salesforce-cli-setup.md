@@ -23,5 +23,5 @@ You can install the following Visual Studio Code extensions to integrate Salesfo
 - [Salesforce Extension Pack](vscode:extension/salesforce.salesforcedx-vscode)
 - [Salesforce Extension Pack (Expanded)](vscode:extension/salesforce.salesforcedx-vscode-expanded)
 - [Salesforce Package Generator](vscode:extension/VignaeshRamA.sfdx-package-xml-generator)
-- [Apex PMD](vscode:extension/itemName=chuckjonas.apex-pmd)
+- [Apex PMD](vscode:extension/chuckjonas.apex-pmd)
 - [Lightning Flow Scanner](vscode:extension/ForceConfigControl.lightningflowscanner)
