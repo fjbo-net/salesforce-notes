@@ -104,3 +104,10 @@ External Client Apps (ECA) are the next-generation of Connected Apps.
 | Data access management (OAuth) | [Available](https://help.salesforce.com/s/articleView?id=xcloud.connected_app_manage.htm&language=en_US&type=5) | [Available](https://help.salesforce.com/s/articleView?id=xcloud.meta_configure_external_client_app_policies.htm&language=en_US&type=5) |
 | Canvas | [Available](https://help.salesforce.com/s/articleView?id=xcloud.connected_app_create_canvas.htm&language=en_US&type=5) | [Available](https://help.salesforce.com/s/articleView?id=xcloud.configure_external_client_app_canvas.htm&language=en_US&type=5) |
 | Notifications | [Available](https://help.salesforce.com/s/articleView?id=xcloud.connected_app_notifications.htm&language=en_US&type=5) | [Available](https://help.salesforce.com/s/articleView?id=xcloud.configure_external_client_app_notification_settings.htm&language=en_US&type=5) |
+
+
+## Setting Up An External Client App
+
+### Secure Unnattended Machine-to-Machine Connections
+
+This section applies only for connecting third-party systems to consume Salesforce data using secure machine-to-machine credentials using a non-interactive OAuth authentication flow.
