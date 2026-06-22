@@ -148,3 +148,26 @@ This section applies only for connecting third-party systems to consume Salesfor
 	0. Click the **Create** button
 	0. After saving the new External Client App, the app's *Manage External Client App* page will be displayed.
 
+0. **Configure App Policies**
+
+	1. The app's *Manage External Client Apps* page is displayed after creating a new ECA, but you can also get to that page by going to *Setup* > *Apps* > *External Client Apps* > *External Client App Manager* and clicking on the app's name.
+	0. Click **Edit**
+	0. Under the *Policies* tab > *App Policies*:
+		1. For *Start Page* select **None**
+	0. Under *Policies* > *OAuth Policies* > **Plugin Policies**
+		1. For *Permitted Users*, select **Admin approved users are pre-authorized**
+		0. A confirmation modal window will pop-up, click on **OK**
+		0. **Select Profiles** will be displayed
+		0. Select the *Profile* that you want to grant access to the External Client App
+	0. Under *Policies* tab > *OAuth Policies* > **OAuth Flows and External Client App Enhancements**
+		1. Check the **Enable Client Credentials Flow** checkbox
+		0. *Run As* will be displayed, enter the username for the integration account
+	0. Under *Policies* tab > *OAuth Policies* > **App Authorization**
+		1. For *Refresh Token Policy* select **Refresh token is valid until revoked**
+		0. For *IP Relaxation*, select **Enfore IP restrictions**
+		0. Click **Save**
+	0. Under the *Settings* tab > *OAuth Settings* > **Trusted IP Ranges for OAuth Web Server Flow**
+		1. Click the **Add** button (plus character)
+		0. A modal window for the IP Ranges will be displayed, fill in the fields with a secure IP range you will be connecting from
+		0. Click **Save** to close the modal window and save the new IP range
+		0. Click **Save**
