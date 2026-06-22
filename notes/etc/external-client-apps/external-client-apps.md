@@ -111,3 +111,40 @@ External Client Apps (ECA) are the next-generation of Connected Apps.
 ### Secure Unnattended Machine-to-Machine Connections
 
 This section applies only for connecting third-party systems to consume Salesforce data using secure machine-to-machine credentials using a non-interactive OAuth authentication flow.
+
+1. **Create External App**
+
+	1. Go to *Setup* > *Apps* > *External Client App* > **External Client App Manager**
+	0. At the *External Client App Manager* page, click on **New External Client App**
+	0. Fill the required *Basic Information*
+		- **Label**
+		- **API Name**
+		- **Contact Email**
+		- For **Distribution**, select `Local`
+
+	0. Under *API (Enable OAuth Settings) check the **Enable OAuth** checkbox to configure OAuth settings and policies:
+
+		- Under *API (Enable OAuth Settings)* > *App Settings*, configure the following:
+
+			1. For **Callback URL**, type `https://localhost/`
+			0. Select the following **OAuth Scopes**
+				- `api`
+				- `refresh_token`
+
+		- Under *API (Enable OAuth Settings)* > *Flow Enablement*
+
+			1. Check the **Enable Client Credentials Flow** checkbox
+			0. A confirmation dialog will pop-up, click **Ok**
+			0. Check the **Enable JWT Bearer Flow**
+			0. A *Certificate Upload* option will be displayed, click the **Upload Files** button
+			0. In your computer, select the **Certificate PEM File** for the signing certificate
+
+		- Under *API (Enable OAuth Settings)* > *Security*:
+
+			1. Check the **Require secret for Web Server Flow** checkbox ?
+			0. Check the **Require secret for Refresh Token Flow** checkbox ?
+			0. Check the **Require Proof Key for Code Exchange (PKCE) extension for Supported Authorization Flows** ?
+
+	0. Click the **Create** button
+	0. After saving the new External Client App, the app's *Manage External Client App* page will be displayed.
+
